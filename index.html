@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Daily Progress Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ATHENA CONTRACTING, INC.</h1>
+  <h2>DAILY PROGRESS REPORT</h2>
+
+  <table>
+    <tr>
+      <td>JOB#: <input type="text" id="jobNumber"></td>
+      <td>DATE: <input type="date" id="date"></td>
+    </tr>
+    <tr>
+      <td colspan="2">COMPLETED BY: <input type="text" id="completedBy"></td>
+    </tr>
+    <tr>
+      <td colspan="2">CUSTOMER/CONTRACTOR: <input type="text" id="customer"></td>
+    </tr>
+    <tr>
+      <td colspan="2">PROJECT NAME/LOCATION: <input type="text" id="project"></td>
+    </tr>
+    <tr>
+      <td colspan="2">CUSTOMER SIGNATURE FOR T&M ONLY: _________________________</td>
+    </tr>
+  </table>
+
+  <table>
+    <thead>
+      <tr>
+        <th>WORK PERFORMED</th>
+        <th>HOURS WORKED</th>
+        <th>NAME</th>
+        <th>OT HOURS/ COST CODE</th>
+        <th>JOB CLASS</th>
+        <th>TOT HRS</th>
+        <th>HOURS/ COST CODE</th>
+        <th>TIME OUT</th>
+        <th>HOURS/ COST CODE</th>
+        <th>HOURS/ COST CODE</th>
+        <th>TIME IN</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" class="workPerformed"></td>
+        <td><input type="number" class="hoursWorked"></td>
+        <td><input type="text" class="name"></td>
+        <td><input type="text" class="otHours"></td>
+        <td><input type="text" class="jobClass"></td>
+        <td><input type="number" class="totHrs"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="time" class="timeOut"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="time" class="timeIn"></td>
+      </tr>
+      <tr>
+        <td><input type="text" class="workPerformed"></td>
+        <td><input type="number" class="hoursWorked"></td>
+        <td><input type="text" class="name"></td>
+        <td><input type="text" class="otHours"></td>
+        <td><input type="text" class="jobClass"></td>
+        <td><input type="number" class="totHrs"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="time" class="timeOut"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="time" class="timeIn"></td>
+      </tr>
+      <tr>
+        <td><input type="text" class="workPerformed"></td>
+        <td><input type="number" class="hoursWorked"></td>
+        <td><input type="text" class="name"></td>
+        <td><input type="text" class="otHours"></td>
+        <td><input type="text" class="jobClass"></td>
+        <td><input type="number" class="totHrs"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="time" class="timeOut"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="text" class="hoursCostCode"></td>
+        <td><input type="time" class="timeIn"></td>
+      </tr>
+      </tbody>
+  </table>
+
+  <button onclick="downloadPDF()">Save and Download PDF</button>
+
+  <script>
+    async function downloadPDF() {
+      // Fetch the existing PDF
+      const pdfUrl = 'Fillable T and M Time Sheet.pdf'; 
+      const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
+
+      // Load the PDF
+      const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+
+      // Get the form
+      const form = pdfDoc.getForm();
+
+      // Fill the form fields
+      form.getTextField('JOB').setText(document.getElementById('jobNumber').value);
+      form.getTextField('Date').setText(document.getElementById('date').value);
+      // ... (fill other fields similarly) ...
+
+      // Add more logic to fill the table fields dynamically
+
+      // Serialize the PDF to bytes
+      const pdfBytes = await pdfDoc.save();
+
+      // Trigger the download
+      download(pdfBytes, "filled-progress-report.pdf", "application/pdf");
+    }
+
+    function download(data, filename, type) {
+      const blob = new Blob([data], { type: type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+</html>
