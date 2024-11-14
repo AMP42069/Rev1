@@ -8,21 +8,24 @@
     <canvas id="pdfViewer"></canvas>
 
     <script>
-        // Fetch and render the PDF
-        pdfjsLib.getDocument('/Fillable T and M Time Sheet.pdf').promise.then(function(pdf) {
-            pdf.getPage(1).then(function(page) {
-                var canvas = document.getElementById('pdfViewer');
-                var context = canvas.getContext('2d');
+        // Wait for the PDF.js library to load completely
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch and render the PDF
+            pdfjsLib.getDocument('your_timesheet.pdf').promise.then(function(pdf) {
+                pdf.getPage(1).then(function(page) {
+                    var canvas = document.getElementById('pdfViewer');
+                    var context = canvas.getContext('2d');
 
-                var viewport = page.getViewport({ scale: 1.5 });
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+                    var viewport = page.getViewport({ scale: 1.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
 
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                page.render(renderContext);
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
             });
         });
     </script>
